@@ -180,6 +180,9 @@ class ChmodTask extends Task {
      * @param int $mode
      */
     private function chmodFile(PhingFile $file, $mode) {
+        
+        static $recursionCount = 0;
+        
         if ( !$file->exists() ) {
             throw new BuildException("The file " . $file->__toString() . " does not exist");
         }   
@@ -189,6 +192,14 @@ class ChmodTask extends Task {
             if ($this->verbose) {
                 $this->log("Changed file mode on '" . $file->__toString() ."' to " . vsprintf("%o", $mode));
             }
+            
+            // Recurse down into directories
+            // @todo - Add limit to recursion to prevent memory-suck failures?
+            if ($this->recursive && $this->file->isDirectory()) {
+                $recursionCount++;
+                $this->chmodFile($file, $mode);
+            }
+            
         } catch (Exception $e) {
             if($this->failonerror) {
                 throw $e;
