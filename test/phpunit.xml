@@ -15,6 +15,9 @@
         <testsuite name="AllTests">
             <directory>classes/phing/</directory>
         </testsuite>
+        <testsuite name="John">
+            <directory>classes/phing/tasks/system/ChownTaskTest.php</directory>
+        </testsuite>
     </testsuites>
     <groups>
         <exclude>

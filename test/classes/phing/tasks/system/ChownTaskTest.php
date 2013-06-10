@@ -23,6 +23,36 @@ class ChownTaskTest extends BuildFileTest
         $this->executeTarget('clean');
     }
 
+    public function testRecursiveChown()
+    {	
+        $this->markTestSkipped("This test task is almost ready but we need to make our code changes first");
+
+	$username = 'nobody';
+        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+            $this->markTestSkipped("chown tests don't work on Windows");
+        }
+
+        $userinfo = posix_getpwuid(posix_geteuid());
+        $username = $userinfo['name'];
+
+	if ($username !== 'root') {
+	    $this->markTestSkipped("chown test probably won't work unless you're root.");
+	}
+
+	// Set target username for recursive chown
+        $this->project->setUserProperty(
+            'targetuser', $username 
+        );
+
+        $this->executeTarget(__FUNCTION__);
+        $a = stat(PHING_TEST_BASE . '/etc/tasks/system/tmp/chowntestB');
+        $b = stat(PHING_TEST_BASE . '/etc/tasks/system/tmp/subdir');
+        $c = stat(PHING_TEST_BASE . '/etc/tasks/system/tmp/subdir/chowntestC');
+
+	$testUser = posix_getpwuid($c['uid']);
+
+    }
+
     public function testChangeGroup()
     {
         if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {

@@ -44,6 +44,8 @@ class ChownTask extends Task {
     private $failonerror = true;
     private $verbose = true;
 
+    private $recursive = false;
+
     /**
      * This flag means 'note errors to the output, but keep going'
      * @see setQuiet()
@@ -84,6 +86,13 @@ class ChownTask extends Task {
      */
     function setUser($user) {
         $this->user = $user;
+    }
+
+    /**
+     * Sets recursive mode
+     */
+    function setRecursive($bool) {
+        $this->recursive = (bool)$bool;
     }
 
     /**

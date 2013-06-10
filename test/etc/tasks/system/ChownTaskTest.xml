@@ -16,4 +16,17 @@
             </fileset>
         </chown>
     </target>
+
+    <target name="testRecursiveChown">
+        <mkdir dir="${tmp.dir}"/>
+        <mkdir dir="${tmp.dir}/${tmp.sub.dir}"/>
+        <touch file="${tmp.dir}/chowntestA"/>
+        <touch file="${tmp.dir}/chowntestB"/>
+        <touch file="${tmp.dir}/${tmp.sub.dir}/chowntestC"/>
+        <chown user="${targetuser}" recursive="true">
+            <fileset dir="${tmp.dir}">
+                <include name="chowntestB"/>
+            </fileset>
+        </chown>
+    </target>
 </project>
